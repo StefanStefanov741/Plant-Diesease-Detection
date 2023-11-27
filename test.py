@@ -3,12 +3,12 @@ import torch
 import torchvision.transforms as transforms
 from PIL import Image
 
-# Function to load the saved model
+#Function to load the saved model
 def load_model(model_path):
-    # Load the entire model
+    #Load the entire model
     return torch.load(model_path)
 
-# for moving data to device (CPU or GPU)
+#for moving data to device (CPU or GPU)
 def to_device(data, device):
     if isinstance(data, (list, tuple)):
         return [to_device(x, device) for x in data]
@@ -20,13 +20,12 @@ def get_default_device():
     else:
         return torch.device("cpu")
 
-# Path to the saved model file
+#Path to the saved model file
 saved_model_path = 'plant-disease-model-augmentation-PlusNoise.pth'
 
 data_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/New Plant Diseases Dataset(Augmented)/New Plant Diseases Dataset(Augmented)"
-train_dir = data_dir + "/train"
 
-# Load the model
+#Load the model
 loaded_model = load_model(saved_model_path)
 
 test_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/test"
@@ -34,31 +33,31 @@ test_images = sorted(os.listdir(test_dir))
 device = get_default_device()
 
 def predict_image(image_path, model):
-    # Open and transform the image
-    img = transforms.ToTensor()(Image.open(image_path).convert('RGB'))  # Ensure the image is RGB
-    # Convert to a batch of 1
+    #Open and transform the image
+    img = transforms.ToTensor()(Image.open(image_path).convert('RGB'))  #Ensure the image is RGB
+    #Convert to a batch of 1
     xb = to_device(img.unsqueeze(0), device)
-    # Get predictions from model
+    #Get predictions from model
     yb = model(xb)
-    # Pick index with highest probability
+    #Pick index with highest probability
     _, preds = torch.max(yb, dim=1)
-    # Return the predicted label index
+    #Return the predicted label index
     return preds[0].item()
 
 def get_folder_name_at_index(index):
-    folder_path = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/New Plant Diseases Dataset(Augmented)/New Plant Diseases Dataset(Augmented)/train"
-    # Get a list of all folders in the specified path
+    folder_path = data_dir+"/train"
+    #Get a list of all folders in the specified path
     folder_list = [folder for folder in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, folder))]
 
-    # Sort the list of folders to ensure a consistent order
+    #Sort the list of folders to ensure a consistent order
     folder_list.sort()
 
-    # Check if the index is within the valid range
+    #Check if the index is within the valid range
     if 0 <= index < len(folder_list):
-        # Return the folder name at the specified index
+        #Return the folder name at the specified index
         return folder_list[index]
     else:
-        # If the index is out of range, return None or handle the error as needed
+        #If the index is out of range, return None or handle the error as needed
         return None
 
 test_image_paths = [os.path.join(test_dir, image_name) for image_name in test_images]

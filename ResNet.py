@@ -11,7 +11,6 @@ import torchvision.transforms as transforms   # for transforming images into ten
 from torchvision.utils import make_grid       # for data checking
 from torchvision.datasets import ImageFolder  # for working with classes and images
 from torchsummary import summary              # for getting the summary of our model
-from SimpleResidualBlock import SimpleResidualBlock
 from ImageClassificationBase import ImageClassificationBase
 
 

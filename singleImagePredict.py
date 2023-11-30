@@ -1,5 +1,4 @@
 import os
-import matplotlib.pyplot as plt
 import torch
 import torchvision.transforms as transforms
 from PIL import Image

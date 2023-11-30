@@ -11,18 +11,12 @@ import torchvision.transforms as transforms   #for transforming images into tens
 from torchvision.utils import make_grid       #for data checking
 from torchvision.datasets import ImageFolder  #for working with classes and images
 from torchsummary import summary              #for getting the summary of our model
-from SimpleResidualBlock import SimpleResidualBlock
-from ImageClassificationBase import ImageClassificationBase
 from ResNet import ResNet9
-
-def add_noise(x, noise_level=0.1):
-    #Add Gaussian noise
-    return x + noise_level * torch.randn_like(x)
 
 if __name__ == '__main__':
 
-    data_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/New Plant Diseases Dataset(Augmented)/New Plant Diseases Dataset(Augmented)"
-    train_dir = os.path.join(data_dir, "train")
+    data_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB"
+    train_dir = os.path.join(data_dir, "trainWithNoise")
     valid_dir = os.path.join(data_dir, "valid")
     diseases = os.listdir(train_dir)
 
@@ -60,7 +54,7 @@ if __name__ == '__main__':
         plt.plot(accuracies, '-x')
         plt.xlabel('epoch')
         plt.ylabel('accuracy')
-        plt.title('Accuracy vs. No. of epochs');
+        plt.title('Accuracy vs. No. of epochs')
 
     def plot_losses(history):
         train_losses = [x.get('train_loss') for x in history]
@@ -70,83 +64,18 @@ if __name__ == '__main__':
         plt.xlabel('epoch')
         plt.ylabel('loss')
         plt.legend(['Training', 'Validation'])
-        plt.title('Loss vs. No. of epochs');
+        plt.title('Loss vs. No. of epochs')
         
     def plot_lrs(history):
         lrs = np.concatenate([x.get('lrs', []) for x in history])
         plt.plot(lrs)
         plt.xlabel('Batch no.')
         plt.ylabel('Learning rate')
-        plt.title('Learning Rate vs. Batch no.');
-
-    """
-    print(diseases)
-
-    print("Total disease classes are: {}".format(len(diseases)))
-    """
-
-    """
-    plants = []
-    NumberOfDiseases = 0
-    for plant in diseases:
-        if plant.split('___')[0] not in plants:
-            plants.append(plant.split('___')[0])
-        if plant.split('___')[1] != 'healthy':
-            NumberOfDiseases += 1
-
-    #unique plants in the dataset
-    print(f"Unique Plants are: \n{plants}")
-
-    #number of unique plants
-    print("Number of plants: {}".format(len(plants)))
-
-    #number of unique diseases
-    print("Number of diseases: {}".format(NumberOfDiseases))
-    """
-
-    """
-    #Number of images for each disease
-    nums = {}
-    for disease in diseases:
-        nums[disease] = len(os.listdir(train_dir + '/' + disease))
-
-    #converting the nums dictionary to pandas dataframe passing index as plant name and number of images as column
-
-    img_per_class = pd.DataFrame(nums.values(), index=nums.keys(), columns=["no. of images"])
-    print(img_per_class)
-    """
-
-    """
-    #plotting number of images available for each disease
-    index = [n for n in range(38)]
-    plt.figure(figsize=(20, 5))
-    plt.bar(index, [n for n in nums.values()], width=0.3)
-    plt.xlabel('Plants/Diseases', fontsize=10)
-    plt.ylabel('No of images available', fontsize=10)
-    plt.xticks(index, diseases, fontsize=5, rotation=90)
-    plt.title('Images per each class of plant disease')
-    plt.show()
-    """
-
-    """
-    n_train = 0
-    for value in nums.values():
-        n_train += value
-    print(f"There are {n_train} images for training")
-    """
-    #First change: Added transorms for adding random augmentation such as noise, rotations, flips and brightness changes.
-    train_transform = transforms.Compose([
-        transforms.RandomResizedCrop(256),
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomVerticalFlip(),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2),
-        transforms.ToTensor(),
-        transforms.Lambda(add_noise),
-    ])
+        plt.title('Learning Rate vs. Batch no.')
 
     #datasets for training and validation
-    train = ImageFolder(train_dir, transform=train_transform)
-    valid = ImageFolder(valid_dir, transform=train_transform)
+    train = ImageFolder(train_dir, transform=transforms.ToTensor())
+    valid = ImageFolder(valid_dir, transform=transforms.ToTensor())
 
     #Setting the seed value
     random_seed = 42
@@ -171,7 +100,6 @@ if __name__ == '__main__':
 
     #getting summary of the model
     INPUT_SHAPE = (3, 256, 256)
-    #print(summary(model.cuda(), (INPUT_SHAPE)))
 
     #for training
     @torch.no_grad()
@@ -241,15 +169,6 @@ if __name__ == '__main__':
                              grad_clip=grad_clip, 
                              weight_decay=1e-4, 
                              opt_func=opt_func)
-    
-    #print(history)
-    #plot_accuracies(history)
-    #plot_losses(history)
-    #plot_lrs(history)
-
-    #saving to the kaggle working directory
-    #PATH = './plant-disease-model.pth'  
-    #torch.save(model.state_dict(), PATH)
 
     #saving the entire model to working directory
     PATH = './plant-disease-model-augmentation-PlusNoise.pth'

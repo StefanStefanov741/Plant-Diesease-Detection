@@ -7,7 +7,7 @@ def add_noise_and_save(original_path, output_path):
     image = np.array(Image.open(original_path))
 
     #Generate noise with the same shape as the image
-    noise = np.random.normal(loc=0, scale=25 * 2, size=image.shape)
+    noise = np.random.normal(loc=0, scale=150 , size=image.shape)
 
     #Add noise to the image
     noisy_image = np.clip(image + noise, 0, 255).astype(np.uint8)
@@ -32,8 +32,8 @@ def process_folder(folder_path):
         if file.lower().endswith(('.png', '.jpg', '.jpeg', '.JPG', '.PNG')):
             #Generate the paths for the original and noisy images
             original_image_path = os.path.join(folder_path, file)
-            #noisy_image_path = os.path.join(folder_path, file.replace('.', '2.')) #Use this to add a second noisy image to dataset
-            noisy_image_path = original_image_path #Use this to replace the original image with a noisy version
+            noisy_image_path = os.path.join(folder_path, file.replace('.', '2.')) #Use this to add a second noisy image to dataset
+            #noisy_image_path = original_image_path #Use this to replace the original image with a noisy version
 
             #Add noise and save the noisy image
             add_noise_and_save(original_image_path, noisy_image_path)
@@ -49,7 +49,7 @@ def process_folders(base_path):
 
 if __name__ == '__main__':
     #Specify the base path where your folders are located
-    base_path = 'C:\\Users\\tetij\\Desktop\\IVP\\Plant Dataset 4GB\\noiseValid\\'
+    base_path = 'C:\\Users\\tetij\\Desktop\\IVP\\Plant Dataset 4GB\\trainWithNoise\\'
 
     #Process folders and add noise to images
     process_folders(base_path)

@@ -13,8 +13,6 @@ if __name__ == '__main__':
     from torchvision.utils import make_grid       #for data checking
     from torchvision.datasets import ImageFolder  #for working with classes and images
     from torchsummary import summary              #for getting the summary of our model
-    from SimpleResidualBlock import SimpleResidualBlock
-    from ImageClassificationBase import ImageClassificationBase
     from ResNet import ResNet9
 
     data_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/New Plant Diseases Dataset(Augmented)/New Plant Diseases Dataset(Augmented)"
@@ -130,18 +128,10 @@ if __name__ == '__main__':
         n_train += value
     print(f"There are {n_train} images for training")
     """
-    #First change: Added transorms for adding random augmentation such as noise, rotations, flips and brightness changes.
-    train_transform = transforms.Compose([
-        transforms.RandomResizedCrop(256),
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomVerticalFlip(),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2),
-        transforms.ToTensor(),
-    ])
 
     #datasets for training and validation
-    train = ImageFolder(train_dir, transform=train_transform)
-    valid = ImageFolder(valid_dir, transform=train_transform)
+    train = ImageFolder(train_dir, transform=transforms.ToTensor())
+    valid = ImageFolder(valid_dir, transform=transforms.ToTensor())
 
     #Setting the seed value
     random_seed = 42
@@ -247,5 +237,5 @@ if __name__ == '__main__':
     #torch.save(model.state_dict(), PATH)
 
     #saving the entire model to working directory
-    PATH = './plant-disease-model-augmentation-PlusNoise.pth'
+    PATH = './plant-disease-model-original.pth'
     torch.save(model, PATH)

@@ -21,7 +21,7 @@ def get_default_device():
         return torch.device("cpu")
 
 #Path to the saved model file
-saved_model_path = 'plant-disease-model-augmentation-PlusNoise.pth'
+saved_model_path = 'plant-disease-model-augmentation-PlusNoise-Rotation.pth'
 
 data_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/New Plant Diseases Dataset(Augmented)/New Plant Diseases Dataset(Augmented)"
 

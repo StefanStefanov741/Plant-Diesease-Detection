@@ -22,15 +22,20 @@ def get_default_device():
 
 data_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/New Plant Diseases Dataset(Augmented)/New Plant Diseases Dataset(Augmented)"
 
-#Path to the saved model file
+#Pick a model to use
 #saved_model_path = 'plant-disease-model-original.pth' #Original model
 #saved_model_path = 'plant-disease-model-augmentation-PlusNoise.pth' #Model for noise
-saved_model_path = 'plant-disease-model-augmentation-PlusNoise-Rotation.pth' #Model for noise and rotations
+#saved_model_path = 'plant-disease-model-augmentation-PlusNoise-Rotation.pth' #Model for noise and rotations
+#saved_model_path = 'plant-disease-model-augmentation-Plus-Noise-Rotation-Blur.pth' #Model for noise, rotations and blur
+saved_model_path = 'plant-disease-model-augmentation-Plus-Noise-Rotation-Blur-ColorJutter.pth' #Model for noise, rotations, blur and color jitter
 
-#test_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/valid" #test with original validation set
+#Pick a dataset to test the model on
+test_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/valid" #test with original validation set
 #test_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/noiseValid" #test with noisy validation set
 #test_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/flippedValid" #test with flipped validation set
-test_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/rotatedValid" #test with rotated image validation set
+#test_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/rotatedValid" #test with rotated image validation set
+#test_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/blurValid" #test with blurry images
+#test_dir = "C:/Users/tetij/Desktop/IVP/Plant Dataset 4GB/colorJitterValid" #test with colorJitter images
 
 test_images = sorted(os.listdir(test_dir))
 device = get_default_device()
@@ -63,7 +68,6 @@ def get_folder_name_at_index(index):
         #Return the folder name at the specified index
         return folder_list[index]
     else:
-        #If the index is out of range, return None or handle the error as needed
         return None
     
 def predict_dataset(dataset_path, model):

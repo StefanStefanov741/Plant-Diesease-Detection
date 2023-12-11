@@ -28,7 +28,7 @@ def process_folder(folder_path):
 
     #Process each file in the folder
     for file in files:
-        #Check if the file is an image (you can add more image extensions if needed)
+        #Check if the file is an image
         if file.lower().endswith(('.png', '.jpg', '.jpeg', '.JPG', '.PNG')):
             #Generate the paths for the original and noisy images
             original_image_path = os.path.join(folder_path, file)
@@ -48,7 +48,7 @@ def process_folders(base_path):
         process_folder(folder_path)
 
 if __name__ == '__main__':
-    #Specify the base path where your folders are located
+    #Specify the base path where the folders are located
     base_path = 'C:\\Users\\tetij\\Desktop\\IVP\\Plant Dataset 4GB\\trainWithNoise\\'
 
     #Process folders and add noise to images
